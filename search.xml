@@ -3,7 +3,7 @@
   <entry>
     <title>helloworld3</title>
     <url>/2020/02/18/88cc.html</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<h3 id="你好世界"><a href="#你好世界" class="headerlink" title="你好世界"></a>你好世界</h3>]]></content>
       <categories>
         <category>未分类</category>
       </categories>
@@ -11,8 +11,7 @@
   <entry>
     <title>helloworld2</title>
     <url>/2020/02/18/480d.html</url>
-    <content><![CDATA[<p>1</p>
-]]></content>
+    <content><![CDATA[<h2 id="世界你好"><a href="#世界你好" class="headerlink" title="世界你好"></a>世界你好</h2>]]></content>
       <categories>
         <category>未分类</category>
       </categories>
