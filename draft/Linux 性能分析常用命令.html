@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-book.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-book.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.inote.xin","root":"/","scheme":"Pisces","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="top​    top命令是Linux下常用的性能分析工具，能够实时显示系统中各个进程的资源占用状况，类似Windows的任务管理器。 12345678910111213141516171819202122232425262728root@ZooKeeper-node1:~# toptop - 00:26:59 up 9 days, 21:47,  2 users,  load average:">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Linux 性能分析常用命令">
+<meta property="og:url" content="http://blog.inote.xin/draft/Linux%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4.html">
+<meta property="og:site_name" content="嘘低调的博客">
+<meta property="og:description" content="top​    top命令是Linux下常用的性能分析工具，能够实时显示系统中各个进程的资源占用状况，类似Windows的任务管理器。 12345678910111213141516171819202122232425262728root@ZooKeeper-node1:~# toptop - 00:26:59 up 9 days, 21:47,  2 users,  load average:">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-02-25T02:10:44.000Z">
+<meta property="article:modified_time" content="2020-02-27T08:04:10.753Z">
+<meta property="article:author" content="inote">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://blog.inote.xin/draft/Linux%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: false
+  };
+</script>
+
+  <title>Linux 性能分析常用命令 | 嘘低调的博客
+  </title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">嘘低调的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">inote</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+  
+  
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+    
+    
+    
+    <div class="post-block" lang="zh-CN">
+      <header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">Linux 性能分析常用命令
+</h1>
+
+<div class="post-meta">
+  
+
+</div>
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+          <h2 id="top"><a href="#top" class="headerlink" title="top"></a>top</h2><p>​    top命令是Linux下常用的性能分析工具，能够实时显示系统中各个进程的资源占用状况，类似Windows的任务管理器。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">root@ZooKeeper-node1:~# top</span><br><span class="line">top - 00:26:59 up 9 days, 21:47,  2 users,  load average: 0.14, 0.18, 0.15</span><br><span class="line">Tasks: 214 total,   1 running, 159 sleeping,   0 stopped,   0 zombie</span><br><span class="line"><span class="meta">%</span><span class="bash">Cpu(s):  0.3 us,  0.3 sy,  0.0 ni, 99.4 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st</span></span><br><span class="line">KiB Mem :  4038804 total,   143108 free,  2883560 used,  1012136 buff/cache</span><br><span class="line">KiB Swap:  2092028 total,   930040 free,  1161988 used.   869864 avail Mem </span><br><span class="line"></span><br><span class="line">  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND                                                                                               </span><br><span class="line"> 2820 root      20   0   42892   4024   3296 R   0.3  0.1   0:00.10 top                                                                                                   </span><br><span class="line"> 5035 ctop      20   0  239276  79828  11316 S   0.3  2.0 101:19.66 gitea                                                                                                 </span><br><span class="line"> 5391 999       20   0 4773012 115416   7768 S   0.3  2.9  36:34.90 java                                                                                                  </span><br><span class="line"> 6426 ctop      20   0 4731584 813228   8196 S   0.3 20.1  27:51.46 java                                                                                                  </span><br><span class="line"> 6453 999       20   0 4293592 365968  10236 S   0.3  9.1  39:57.34 java                                                                                                  </span><br><span class="line"> 6903 root      20   0       0      0      0 I   0.3  0.0   0:00.48 kworker/2:5                                                                                           </span><br><span class="line">14916 root      20   0       0      0      0 I   0.3  0.0   0:00.45 kworker/u8:0                                                                                          </span><br><span class="line">    1 root      20   0   78328   5916   3552 S   0.0  0.1  17:51.93 systemd                                                                                               </span><br><span class="line">    2 root      20   0       0      0      0 S   0.0  0.0   0:00.26 kthreadd                                                                                              </span><br><span class="line">    4 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 kworker/0:0H                                                                                          </span><br><span class="line">    6 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 mm_percpu_wq                                                                                          </span><br><span class="line">    7 root      20   0       0      0      0 S   0.0  0.0   0:19.24 ksoftirqd/0                                                                                           </span><br><span class="line">    8 root      20   0       0      0      0 I   0.0  0.0  15:50.64 rcu_sched                                                                                             </span><br><span class="line">    9 root      20   0       0      0      0 I   0.0  0.0   0:00.00 rcu_bh                                                                                                </span><br><span class="line">   10 root      rt   0       0      0      0 S   0.0  0.0   0:01.74 migration/0                                                                                           </span><br><span class="line">   11 root      rt   0       0      0      0 S   0.0  0.0   0:03.00 watchdog/0                                                                                            </span><br><span class="line">   12 root      20   0       0      0      0 S   0.0  0.0   0:00.00 cpuhp/0                                                                                               </span><br><span class="line">   13 root      20   0       0      0      0 S   0.0  0.0   0:00.00 cpuhp/1                                                                                               </span><br><span class="line">   14 root      rt   0       0      0      0 S   0.0  0.0   0:02.68 watchdog/1                                                                                            </span><br><span class="line">   15 root      rt   0       0      0      0 S   0.0  0.0   0:01.84 migration/1</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><h6 id="命令格式："><a href="#命令格式：" class="headerlink" title="命令格式："></a>命令格式：</h6><p>top [参数]</p>
+</li>
+<li><h6 id="命令功能："><a href="#命令功能：" class="headerlink" title="命令功能："></a>命令功能：</h6><p>显示当前系统正在执行的进程的相关信息，包括进程ID、内存占用率、CPU占用率等。</p>
+</li>
+<li><h6 id="命令参数"><a href="#命令参数" class="headerlink" title="命令参数"></a>命令参数</h6><p>-b 批处理   <code>只显示进程信息</code></p>
+<p>-c 显示完整的执行命令 <code>常用</code></p>
+<p>-S 累计模式，会把已完成或退出的子进程占用的CPU时间累计到父进程的MITE+</p>
+<p>-i 不显示任何闲置或者僵尸进程 <code>常用</code></p>
+<p>-u 指定用户</p>
+<p>-p 指定进程</p>
+<p>-n 指定循环显示的次数</p>
+</li>
+<li><h6 id="面板信息"><a href="#面板信息" class="headerlink" title="面板信息"></a>面板信息</h6><table>
+<thead>
+<tr>
+<th>信息栏 第一行</th>
+<th>含义（基本信息）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>top - 08:56:22</td>
+<td>当前时间:08:56:22</td>
+</tr>
+<tr>
+<td>up 23 days, 19:15,</td>
+<td>运行时间23天又19小时15分钟</td>
+</tr>
+<tr>
+<td>1 user,</td>
+<td>当前有一个登录用户</td>
+</tr>
+<tr>
+<td>load average: 0.00, 0.01, 0.05</td>
+<td>系统负载，三个数值分别为1分钟、5分钟、15分钟到现在的平均值</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>系统负载理解</p>
+<p>1.单核CPU-单车道-数字在0.00-1.00之间正常</p>
+<p>2.多核CPU-多车道-数字/CPU核数 在0.00-1.00之间正常</p>
+<p>3.安全的系统平均负载：单核负载在0.7以下是安全的，超过0.7就需要进行优化</p>
+<p>4.应该看哪一个数字，1分钟，5分钟，15分钟。我认为看后面5分钟和15分钟比较合适。</p>
+<p>5.如何查看CPU几核。 </p>
+<p>​    (1)grep ‘model name’ /proc/cpuinfo | wc -l </p>
+<p>​    (2)top模式下按1</p>
+</blockquote>
+<hr>
+<table>
+<thead>
+<tr>
+<th>任务栏 第二行 Tasks</th>
+<th>含义（进程状况）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>92 total,</td>
+<td>总共有92个进程</td>
+</tr>
+<tr>
+<td>1 running,</td>
+<td>有一个正在运行的进程数</td>
+</tr>
+<tr>
+<td>91 sleeping,</td>
+<td>有91个睡眠状态的进程数</td>
+</tr>
+<tr>
+<td>0 stopped,</td>
+<td>停止的进程数</td>
+</tr>
+<tr>
+<td>0 zombie</td>
+<td>僵尸进程数</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>僵尸进程：表示已经终止，但任然保留一些信息的进程。等待父进程调用wait();</p>
+</blockquote>
+<hr>
+<table>
+<thead>
+<tr>
+<th>信息栏 第三行 %CPU(s)</th>
+<th>含义(表示占用CPU的百分比)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0.0 us,</td>
+<td>User Time， CPU执行用户进程百分比，包括Nice Time</td>
+</tr>
+<tr>
+<td>0.0 sy,</td>
+<td>System Time, CPU在内核运行百分比，包括IRQ和SoftIRQ</td>
+</tr>
+<tr>
+<td>0.0 ni,</td>
+<td>Nice Time，调整进程优先级所占百分比</td>
+</tr>
+<tr>
+<td>100.0 id,</td>
+<td>Idle Time，系统空闲百分比</td>
+</tr>
+<tr>
+<td>0.0 wa,</td>
+<td>Waiting Time，CPU等待I/O完成所有百分比</td>
+</tr>
+<tr>
+<td>0.0 hi,</td>
+<td>Hard IRQ Time，硬中断占用的CPU时间百分比</td>
+</tr>
+<tr>
+<td>0.0 si,</td>
+<td>Soft IRQ Time，软中断占用CPU时间百分比</td>
+</tr>
+<tr>
+<td>0.0 st</td>
+<td>Steal Time,虚拟服务占用</td>
+</tr>
+</tbody></table>
+<hr>
+<table>
+<thead>
+<tr>
+<th>信息栏 第四行 KiB Mem</th>
+<th>含义（内存使用信息）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>3881804 total,</td>
+<td>总物理内存</td>
+</tr>
+<tr>
+<td>2477576 free,</td>
+<td>空闲的物理内存</td>
+</tr>
+<tr>
+<td>723436 used,</td>
+<td>已使用的</td>
+</tr>
+<tr>
+<td>680792 buff/cache</td>
+<td>缓冲区和缓存区占用内存的总量</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>buff/cache: buffers 和 cache 都是内存中存放的数据，不同的是，buffers 存放的是准备写入磁盘的数据，而 cache 存放的是从磁盘中读取的数据。</p>
+<p>在 Linux 系统中，有一个守护进程（daemon）会定期把 buffers 中的数据写入磁盘，也可以使用 sync 命令手动把 buffers中的数据写入磁盘。使用 buffers 可以把分散的 I/O 操作集中起来，减少了磁盘寻道的时间和磁盘碎片。 cache 是 Linux 把读取频率高的数据，放到内存中，减少 I/O 。Linux 中 cache 没有固定大小，根据使用情况自动增加或删除。</p>
+<p>手动把 buffers 写入硬盘清空 cache</p>
+<p>sync &amp;&amp; echo 3 &gt; /proc/sys/vm/drop_caches</p>
+</blockquote>
+<hr>
+<table>
+<thead>
+<tr>
+<th>信息栏 第五行 KiB Swap</th>
+<th>含义（交换区使用信息）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>4194300 total,</td>
+<td>交换区的总量</td>
+</tr>
+<tr>
+<td>4194300 free,</td>
+<td>未使用的量</td>
+</tr>
+<tr>
+<td>0 used.</td>
+<td>已使用的量</td>
+</tr>
+<tr>
+<td>2909264 avail Mem</td>
+<td>可用的内存量</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Swap（内存交换分区）：</p>
+<p>是硬盘上的一块空间。在内存不足的情况下，操作系统把内存中不用的数据存到硬盘的交换区，腾出内存来让别的程序运行，因此，开启 swap 会一定程度的引起 I/O 性能下降（阿里云服务器默认不开）。</p>
+</blockquote>
+<hr>
+<table>
+<thead>
+<tr>
+<th>信息栏 第六行</th>
+<th>含义（进程信息统计）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PID</td>
+<td>进程ID</td>
+</tr>
+<tr>
+<td>USER</td>
+<td>进程所有者的用户名</td>
+</tr>
+<tr>
+<td>PR</td>
+<td>优先级-</td>
+</tr>
+<tr>
+<td>NI</td>
+<td>nice</td>
+</tr>
+<tr>
+<td>VIRT</td>
+<td>进程使用的虚拟内存总量，单位kb</td>
+</tr>
+<tr>
+<td>RES</td>
+<td>进程使用的，未被换出的物理内存大小，单位kb</td>
+</tr>
+<tr>
+<td>SHR</td>
+<td>共享内存大小，单位kb</td>
+</tr>
+<tr>
+<td>S</td>
+<td>进程状态（D:不可终端的睡眠状态，R：运行，S:睡眠，T:跟踪/停止，Z：僵尸进程）</td>
+</tr>
+<tr>
+<td>%CPU</td>
+<td>上次更新到现在的CPU时间占用比</td>
+</tr>
+<tr>
+<td>%MEM</td>
+<td>进程使用的物理内存百分比</td>
+</tr>
+<tr>
+<td>TIME+</td>
+<td>进程使用的CPU时间总计，单位1/100秒</td>
+</tr>
+<tr>
+<td>COMMAND</td>
+<td>命令名/命令行</td>
+</tr>
+</tbody></table>
+<hr>
+</li>
+<li><h6 id="交互式命令"><a href="#交互式命令" class="headerlink" title="交互式命令"></a>交互式命令</h6><ul>
+<li>1：查看CPU每个核的使用情况</li>
+<li>h：显示帮助画面，给出一些简短的命令总结说明</li>
+<li>k：终止一个进程</li>
+<li>i：忽略闲置和僵死进程，这是一个开关式命令</li>
+<li>q：退出程序</li>
+<li>r：重新安排一个进程的优先级别</li>
+<li>S：切换到累计模式</li>
+<li>s：改变两次刷新之间的延迟时间（单位s），如果有小数，就切换成ms。输入0值则系统不断刷新，默认值是5s</li>
+<li>l ：切换显示平均负载和启动时间信息</li>
+<li>m：切换显示内存信息</li>
+<li>t：切换进程CPU状态信息</li>
+<li>c：切换显示命令名称和完整命令行</li>
+<li>M：根据驻留内存大小进行排序</li>
+<li>P：根据CPU百分比大小进行排序</li>
+<li>T：根据时间/累计时间进行排序</li>
+<li>w：将当前设置写入~/.toprc文件中</li>
+<li>f：可以自定义想要查看的进程信息</li>
+</ul>
+</li>
+</ol>
+<h2 id="vmstat"><a href="#vmstat" class="headerlink" title="vmstat"></a>vmstat</h2><p>vmstat 是 Virtual Memory Statistics (虚拟内存统计)的缩写，利用 vmstat 命令可以对操作系统的内存信息、进程状态和CPU活动等进行监视。但是只能对系统的整体情况进行统计，无法对某个进程进行深入分析。</p>
+<ol>
+<li><h6 id="语法格式"><a href="#语法格式" class="headerlink" title="语法格式"></a>语法格式</h6></li>
+</ol>
+<p>vmstat [选项] [时间间隔] [次数]</p>
+<ul>
+<li>在 vmstat 命令及后面的选项里，每个元素之间都至少要有一个空格。</li>
+<li>delay 表示两次输出之间的间隔时间。</li>
+<li>count 表示按照 delay 指定的时间间隔统计的次数。</li>
+</ul>
+<ol start="2">
+<li><h6 id="选项说明"><a href="#选项说明" class="headerlink" title="选项说明"></a>选项说明</h6></li>
+</ol>
+<p>-a 显示活跃和非活跃内存</p>
+<p>-f 显示从系统启动至今的 fork 进程数量</p>
+<p>-m 显示slab信息</p>
+<p>-n 只在开始时显示一次各字段名称</p>
+<p>-s 显示内存相关统计信息及多种系统活动数量</p>
+<p>-d 显示磁盘相关统计信息</p>
+<p>-p 显示指定磁盘分区统计信息</p>
+<p>-S 使用指定单位显示。参数有k、K、m、M 分别代表 1000、1024、1000000、1048576 字节 </p>
+<p>-t 统计信息带上时间戳</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">root@iZwz9igpepkvn9p5ajom3yZ:~# vmstat -S m</span><br><span class="line">procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----</span><br><span class="line"> r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st</span><br><span class="line"> 4  0    134    108     45    611    0    0    24    27    3    5  2  2 96  0  0</span><br><span class="line">以下是命令结果的详细说明。</span><br><span class="line">第1列：procs。</span><br><span class="line">　　r列表示运行和等待CPU时间片的进程数。</span><br><span class="line">　　b列表示正在等待资源的进程数。</span><br><span class="line">第2列：memory。</span><br><span class="line">　　swpd列表示使用虚拟内存的大小。</span><br><span class="line">　　free列表示当前空闲的物理内存数量。</span><br><span class="line">　　buff列表示buffers的内存数量。</span><br><span class="line">　　cache列表示cache的内存数量。</span><br><span class="line">第3列：swap。</span><br><span class="line">　　si（swap in）列表示由磁盘调入内存，也就是内存进入内存交换区的数量。</span><br><span class="line">　　so（swap out）列表示由内存调入磁盘，也就是内存交换区进入内存的数量。</span><br><span class="line">第4列：I/O项显示磁盘读写状况。</span><br><span class="line">　　bi列表示从块设备读入数据的总量（即读磁盘）（块/s）。</span><br><span class="line">　　bo列表示写入块设备的数据总量（即写磁盘）（块/s）。</span><br><span class="line">第5列：system显示采集间隔内发生的中断数。</span><br><span class="line">　　in列表示在某一时间间隔中观测到的每秒设备中断数。</span><br><span class="line">　　cs列表示每秒产生的上下文切换次数。</span><br><span class="line">第6列：CPU项显示了CPU的使用状态。</span><br><span class="line">　　us列显示了用户进程消耗的CPU时间百分比。</span><br><span class="line">　　sy列显示了系统（内核）进程消耗的CPU时间百分比。</span><br><span class="line">　　id列显示了CPU处在空闲状态的时间百分比。</span><br><span class="line">　　wa列显示了I/0等待所占用的CPU时间百分比。</span><br><span class="line">　　st列显示了虚拟机占用的CPU时间的百分比。</span><br></pre></td></tr></table></figure>
+
+      </div>
+      
+      
+      
+    </div>
+    
+
+    
+    
+    
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#top"><span class="nav-number">1.</span> <span class="nav-text">top</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#命令格式："><span class="nav-number">1.0.0.0.1.</span> <span class="nav-text">命令格式：</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#命令功能："><span class="nav-number">1.0.0.0.2.</span> <span class="nav-text">命令功能：</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#命令参数"><span class="nav-number">1.0.0.0.3.</span> <span class="nav-text">命令参数</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#面板信息"><span class="nav-number">1.0.0.0.4.</span> <span class="nav-text">面板信息</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#交互式命令"><span class="nav-number">1.0.0.0.5.</span> <span class="nav-text">交互式命令</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vmstat"><span class="nav-number">2.</span> <span class="nav-text">vmstat</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#语法格式"><span class="nav-number">2.0.0.0.1.</span> <span class="nav-text">语法格式</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#选项说明"><span class="nav-number">2.0.0.0.2.</span> <span class="nav-text">选项说明</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="inote"
+      src="/images/headImg.jpg">
+  <p class="site-author-name" itemprop="name">inote</p>
+  <div class="site-description" itemprop="description">热爱技术，热爱生活。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">inote</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'cdezUNRswyQ3NhHOIknQRFgV-MdYXbMMI',
+      appKey     : '7z11aUaUg0U5nT6cYDWn1qJX',
+      placeholder: "ヾﾉ≧∀≦)o来啊，快活啊!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
