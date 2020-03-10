@@ -1,17 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Redis缓存雪崩</title>
+    <url>/2020/03/10/a6f9.html</url>
+    <content><![CDATA[<ol>
+<li><h2 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h2></li>
+</ol>
+]]></content>
+      <categories>
+        <category>redis</category>
+      </categories>
+      <tags>
+        <tag>redis</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java基础 枚举(Enum)</title>
     <url>/2020/03/08/a696.html</url>
-    <content><![CDATA[<h2 id="一、枚举的应用场景"><a href="#一、枚举的应用场景" class="headerlink" title="一、枚举的应用场景"></a>一、枚举的应用场景</h2><ul>
+    <content><![CDATA[<ol>
+<li><h2 id="枚举的应用场景"><a href="#枚举的应用场景" class="headerlink" title="枚举的应用场景"></a>枚举的应用场景</h2></li>
+</ol>
+<ul>
 <li>作为普通的常量使用，如 星期、季节、颜色、城市 等等；通常配合 <code>switch</code> 语句使用。 </li>
 <li>往枚举中添加变量、构造函数、以达到灵活获取指定值的目的。 </li>
 <li>通常用于一些业务系统中定义一些固定值，如用于匹配数据库中的字段值等。在平时数据库表的设计中，我们一般以数字来代表一些常量，那么在 <code>java</code> 中就可以通过枚举来将数据库字段的数值和所代表的常量对应起来。 </li>
 <li>往枚举中添加自己特定方法，以实现自己所需的相关业务逻辑。比如：可以通过状态码获得对应的状态码信息。 </li>
 <li>利用枚举实例创建是线程安全的特性实现单例模式。</li>
 </ul>
-<h2 id="二、定义"><a href="#二、定义" class="headerlink" title="二、定义"></a>二、定义</h2><p><strong>枚举</strong>(<code>enum</code>全称为<code>enumeration</code>)类型是Java5新增的类型，放在<code>java.lang</code>包中，允许用常量来表示特点的数据判断，而且全部都以类型安全的形式来表示。</p>
-<h2 id="三、要点"><a href="#三、要点" class="headerlink" title="三、要点"></a>三、要点</h2><ul>
+<ol start="2">
+<li><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2></li>
+</ol>
+<p><strong>枚举</strong>(<code>enum</code>全称为<code>enumeration</code>)类型是Java5新增的类型，放在<code>java.lang</code>包中，允许用常量来表示特点的数据判断，而且全部都以类型安全的形式来表示。</p>
+<ol start="3">
+<li><h2 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h2></li>
+</ol>
+<ul>
 <li>需要的数据不能是任意的，而任意是一定范围内的值</li>
 <li>枚举类也是一个特殊的类，构造默认的修饰符是<code>private</code>的</li>
 <li>枚举值默认的修饰符是<code>public static final</code>，必须要位于枚举类的第一个语句</li>
@@ -19,22 +42,34 @@
 <li>枚举类可以在抽象的方法，但是枚举值必须要实现抽象的方法</li>
 <li>可以使用<code>==</code>来比较枚举实例</li>
 </ul>
-<h2 id="四、常用方法"><a href="#四、常用方法" class="headerlink" title="四、常用方法"></a>四、常用方法</h2><p>枚举中的一些常用方法如下</p>
+<ol start="4">
+<li><h2 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h2></li>
+</ol>
+<p>枚举中的一些常用方法如下</p>
 <ul>
 <li><code>int ordinal()</code>：返回枚举常量的序数（它在枚举声明中的位置，其中初始常量序数为零）。</li>
 <li><code>String name()</code>：返回此枚举常量的名称。</li>
 <li><code>String toString()</code>：返回覆盖枚举常量的<code>toString()</code>方法的值。</li>
 <li><code>int compareTo(E o)</code>：比较此枚举与指定对象的顺序。</li>
 <li><code>Class getDeclaringClass()</code>：返回与此枚举常量的枚举类型相对应的 Class 对象。 </li>
-<li><code>static &lt;T extends Enum&lt;T&gt;&gt; T valueOf(Class enumType, String name)</code>：返回指定名称的枚举常量指定的<code>enumtype</code>的方法。如：<code>ColorEnum color = ColorEnum.valueOf(&quot;RED&quot;);</code> (动态获取类型时常用)。 </li>
+<li><code>static &lt;T extends Enum&lt;T&gt;&gt; T valueOf(Class enumType, String name)</code>：返回指定名称的枚举对象。如：<code>ColorEnum color = ColorEnum.valueOf(&quot;RED&quot;);</code> (动态获取类型时常用)。 </li>
 <li><code>T[] values()</code>:  方法将枚举所有元素<code>item</code>转换成一个数组 。</li>
 </ul>
-<h2 id="五、枚举自定义属性、方法和多态的使用"><a href="#五、枚举自定义属性、方法和多态的使用" class="headerlink" title="五、枚举自定义属性、方法和多态的使用"></a>五、枚举自定义属性、方法和多态的使用</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> ColorEnum &#123;</span><br><span class="line">    <span class="comment">//所有枚举实例都需要实现该方法</span></span><br><span class="line">    RED(<span class="number">1</span>,<span class="string">"红色"</span>)&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">paint</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"我是红色"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, GREEN(<span class="number">2</span>,<span class="string">"绿色"</span>)&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">paint</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"我是绿色"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, BLUE(<span class="number">3</span>,<span class="string">"蓝色"</span>)&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">paint</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"我是蓝色"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"><span class="comment">//    自定义抽象方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">paint</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="comment">//自定义属性</span></span><br><span class="line">    <span class="meta">@Setter</span></span><br><span class="line">    <span class="meta">@Getter</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> code;</span><br><span class="line">    <span class="comment">//自定义属性</span></span><br><span class="line">    <span class="meta">@Getter</span></span><br><span class="line">    <span class="meta">@Setter</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    ColorEnum(<span class="keyword">int</span> code, String name)&#123;</span><br><span class="line">        <span class="keyword">this</span>.code = code;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 自定义方法</span></span><br><span class="line"><span class="comment">     * 根据代码获取颜色名称</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> code</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getNameByCode</span><span class="params">(<span class="keyword">int</span> code)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (ColorEnum color: ColorEnum.values()) &#123;</span><br><span class="line">            <span class="keyword">if</span> (color.code == code) &#123;</span><br><span class="line">                <span class="keyword">return</span> color.name;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li><h2 id="枚举自定义属性、方法和多态的使用"><a href="#枚举自定义属性、方法和多态的使用" class="headerlink" title="枚举自定义属性、方法和多态的使用"></a>枚举自定义属性、方法和多态的使用</h2></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> ColorEnum &#123;</span><br><span class="line">    <span class="comment">//所有枚举实例都需要实现该方法</span></span><br><span class="line">    RED(<span class="number">1</span>,<span class="string">"红色"</span>)&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">paint</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"我是红色"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, GREEN(<span class="number">2</span>,<span class="string">"绿色"</span>)&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">paint</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"我是绿色"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, BLUE(<span class="number">3</span>,<span class="string">"蓝色"</span>)&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">paint</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"我是蓝色"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"><span class="comment">//    自定义抽象方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">paint</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="comment">//自定义属性</span></span><br><span class="line">    <span class="meta">@Setter</span></span><br><span class="line">    <span class="meta">@Getter</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> code;</span><br><span class="line">    <span class="comment">//自定义属性</span></span><br><span class="line">    <span class="meta">@Getter</span></span><br><span class="line">    <span class="meta">@Setter</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    ColorEnum(<span class="keyword">int</span> code, String name)&#123;</span><br><span class="line">        <span class="keyword">this</span>.code = code;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 自定义方法</span></span><br><span class="line"><span class="comment">     * 根据代码获取颜色名称</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> code</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getNameByCode</span><span class="params">(<span class="keyword">int</span> code)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (ColorEnum color: ColorEnum.values()) &#123;</span><br><span class="line">            <span class="keyword">if</span> (color.code == code) &#123;</span><br><span class="line">                <span class="keyword">return</span> color.name;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="六、枚举集合"><a href="#六、枚举集合" class="headerlink" title="六、枚举集合"></a>六、枚举集合</h2><p>Java提供了两种枚举集合类，分别是<code>java.util.EnumSet</code> 和 <code>java.util.EnumMap</code>。<code>EnumMap</code>中的<code>key</code>是<code>enum</code>类型且不能为<code>null</code>，而<code>value</code>可以为任意类型。<code>EnumSet</code>不允许集合重复</p>
+<ol start="6">
+<li><h2 id="枚举集合"><a href="#枚举集合" class="headerlink" title="枚举集合"></a>枚举集合</h2></li>
+</ol>
+<p>Java提供了两种枚举集合类，分别是<code>java.util.EnumSet</code> 和 <code>java.util.EnumMap</code>。<code>EnumMap</code>中的<code>key</code>是<code>enum</code>类型且不能为<code>null</code>，而<code>value</code>可以为任意类型。<code>EnumSet</code>不允许集合重复</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ColorEnumTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        EnumMap&lt;ColorEnum,String&gt; enumMap = <span class="keyword">new</span> EnumMap&lt;ColorEnum, String&gt;(ColorEnum<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        enumMap.put(ColorEnum.RED,<span class="string">"红色"</span>);</span><br><span class="line">        enumMap.put(ColorEnum.BLUE,<span class="string">"蓝色"</span>);</span><br><span class="line">        enumMap.put(ColorEnum.GREEN,<span class="string">"绿色"</span>);</span><br><span class="line">        System.out.println(enumMap.get(ColorEnum.BLUE));</span><br><span class="line"></span><br><span class="line">        EnumSet&lt;ColorEnum&gt; enumSet = EnumSet.noneOf(ColorEnum<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        enumSet.add(ColorEnum.RED);</span><br><span class="line">        enumSet.add(ColorEnum.RED);</span><br><span class="line">        System.out.println(enumSet.size());<span class="comment">//输出 1</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="七、总结"><a href="#七、总结" class="headerlink" title="七、总结"></a>七、总结</h2><ul>
+<ol start="7">
+<li><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2></li>
+</ol>
+<ul>
 <li>枚举类也是一个特殊的类，构造方法默认的修饰符是<code>private</code>（不管写不写）的，它们都可以定义一些属性和方法，但是不能使用<code>extends</code>关键字继承其他类，因为<code>enum</code>已经继承了<code>java.lang.Enum</code>（java是单一继承）。 </li>
 <li>枚举类中可以定义抽象方法，也可以实现一个或者多个接口。 </li>
 <li>使用枚举大大加强了程序的可读性、易用性和可维护性，并且可在此基础之上进行了扩展，使之可以像类一样去使用，更是为 Java 对离散量的表示上升了一个台阶。 </li>
