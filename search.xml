@@ -4,14 +4,28 @@
     <title>Redis缓存雪崩</title>
     <url>/2020/03/10/a6f9.html</url>
     <content><![CDATA[<ol>
-<li><h2 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h2></li>
+<li><h2 id="什么是缓存雪崩"><a href="#什么是缓存雪崩" class="headerlink" title="什么是缓存雪崩"></a>什么是缓存雪崩</h2></li>
+</ol>
+<p>缓存实际上是起到保护数据库的作用，它有利于数据库承受到大量的查询请求，从而起到保护数据库的作用。</p>
+<p>如果某种原因缓存出现故障，那么当一定时间访问量达到一定程度时数据库可能出出现无法承受巨大的访问请求，而发生崩溃，这就是缓存雪崩。</p>
+<ol start="2">
+<li><h2 id="如何避免"><a href="#如何避免" class="headerlink" title="如何避免"></a>如何避免</h2><ol>
+<li><p><strong>高可用</strong></p>
+<p>可通过集群的方式来保证缓存的可用性。</p>
+</li>
+<li><p><strong>熔断器</strong></p>
+<p>可以使用类似 <a href="https://github.com/Netflix/Hystrix" target="_blank" rel="noopener">Hystrix</a>的开源工具来防止雪崩，<code>降级(downgrade)</code>和<code>限流(current limit)</code>来防止雪崩后数据库的崩溃。</p>
+</li>
+</ol>
+</li>
 </ol>
 ]]></content>
       <categories>
-        <category>redis</category>
+        <category>面试题</category>
       </categories>
       <tags>
         <tag>redis</tag>
+        <tag>缓存</tag>
       </tags>
   </entry>
   <entry>
